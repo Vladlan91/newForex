@@ -1,14 +1,16 @@
 group 'newForex'
-version '1.0-SNAPSHOT'
+version '0.1-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: "war"
 
 buildscript {
     repositories {
         mavenCentral()
+        maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE")
@@ -20,14 +22,26 @@ targetCompatibility = 1.8
 
 jar {
     baseName = 'newForex'
-    version =  '0.0.1'
+    version = '0.0.1'
 }
 
 repositories {
     mavenCentral()
 }
 
+configurations {
+    providedRuntime
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
 dependencies {
+    compile("org.springframework.boot:spring-boot-starter-data-rest")
+    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
+    compile("org.springframework.security.oauth:spring-security-oauth2")
+
     // tag::jetty[]
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
